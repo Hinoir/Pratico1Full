@@ -29,6 +29,7 @@ public class preguntaFacil extends AppCompatActivity implements View.OnClickList
     private String operando;
     private String respuesta;
     private int contPuntos;
+    private puntaje pt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

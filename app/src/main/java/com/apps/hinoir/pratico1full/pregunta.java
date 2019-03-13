@@ -10,9 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class pregunta extends AppCompatActivity implements View.OnClickListener {
@@ -32,6 +29,7 @@ public class pregunta extends AppCompatActivity implements View.OnClickListener 
     private String operando;
     private String respuesta;
     private int contPuntos;
+    private puntaje pt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

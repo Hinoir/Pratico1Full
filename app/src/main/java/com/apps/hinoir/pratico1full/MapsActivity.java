@@ -38,6 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FloatingActionButton tienda;
     private Marker markerActual;
     private int tPuntos;
+    private puntaje pt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         preguntaDificil = findViewById(R.id.fab_preguntaDificil);
         tienda = findViewById(R.id.fab_tienda);
         tPuntos=0;
+        pt = new puntaje();
 
     }
 

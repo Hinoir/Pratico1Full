@@ -48,6 +48,7 @@ public class tienda extends AppCompatActivity {
     private int pr4;
     private int pr5;
     private int totalPunto;
+    private puntaje pt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +77,11 @@ public class tienda extends AppCompatActivity {
         n3="Libreta Icesi";
         n4="Camiseta Icesi";
         n5="Saco Icesi";
-        bCompra1.setText(n1);
-        bCompra2.setText(n2);
-        bCompra3.setText(n3);
-        bCompra4.setText(n4);
-        bCompra5.setText(n5);
+        tvProducto1.setText(n1);
+        tvProducto2.setText(n2);
+        tvProducto3.setText(n3);
+        tvProducto4.setText(n4);
+        tvProducto5.setText(n5);
         pr1=35;
         pr2=50;
         pr3=70;
