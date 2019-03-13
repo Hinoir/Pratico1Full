@@ -1,6 +1,7 @@
 package com.apps.hinoir.pratico1full;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class preguntaFacil extends AppCompatActivity implements View.OnClickList
         etRespuesta = findViewById(R.id.et_respuesta);
         tvPregunta = findViewById(R.id.tv_pregunta);
         bValidar = findViewById(R.id.b_validar);
+        contPuntos=0;
         //--------- PrimerLlamado ---------------------
         generarPreguntaFacil();
         bValidar.setOnClickListener(this);
@@ -97,7 +99,9 @@ public class preguntaFacil extends AppCompatActivity implements View.OnClickList
                 ).setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        preguntaFacil.super.onBackPressed();
+                        Intent j = new Intent(preguntaFacil.this,MapsActivity.class);
+                        j.putExtra("puntosF",contPuntos);
+                        startActivity(j);
                     }
                 });
 

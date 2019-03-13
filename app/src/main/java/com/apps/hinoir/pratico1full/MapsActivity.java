@@ -37,6 +37,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FloatingActionButton preguntaDificil;
     private FloatingActionButton tienda;
     private Marker markerActual;
+    private int tPuntos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         preguntaFacil = findViewById(R.id.fab_preguntaFacil);
         preguntaDificil = findViewById(R.id.fab_preguntaDificil);
         tienda = findViewById(R.id.fab_tienda);
+        tPuntos=0;
+
     }
 
     @SuppressLint("MissingPermission")
@@ -76,12 +79,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(markerOptions.get(markerOptions.size()-1));
 
         options = new MarkerOptions().title("Facil")
-                .position(new LatLng(3.341147,-76.530086));
+                .position(new LatLng(3.342354,-76.530160));
         markerOptions.add(options);
         mMap.addMarker(markerOptions.get(markerOptions.size()-1));
 
         options = new MarkerOptions().title("Tienda")
-                .position(new LatLng(3.341773,-76.529896));
+                .position(new LatLng(3.341781,-76.529956));
         markerOptions.add(options);
         mMap.addMarker(markerOptions.get(markerOptions.size()-1));
 
@@ -158,12 +161,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(View v) {
                         Intent j = new Intent(MapsActivity.this,pregunta.class);
+                        startActivity(j);
                     }
                 });
 
             }
             else if(markerOptions.get(indice).getTitle()=="Tienda"){
                 tienda.show();
+                tienda.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent datos = getIntent();
+                        tPuntos+=datos.getExtras().getInt("puntosF");
+                        datos.getExtras().remove("puntosF");
+                        tPuntos+=datos.getExtras().getInt("puntosD");
+                        datos.getExtras().remove("puntosD");
+                        tPuntos+=datos.getExtras().getInt("puntosT");
+                        Intent j = new Intent(MapsActivity.this,tienda.class);
+                        j.putExtra("totalPuntos",tPuntos);
+                        startActivity(j);
+                    }
+                });
 
             }
             else{

@@ -1,6 +1,7 @@
 package com.apps.hinoir.pratico1full;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public class pregunta extends AppCompatActivity implements View.OnClickListener 
         etRespuesta = findViewById(R.id.et_respuesta);
         tvPregunta = findViewById(R.id.tv_pregunta);
         bValidar = findViewById(R.id.b_validar);
+        contPuntos=0;
         //--------- PrimerLlamado ---------------------
         generarPreguntaDificil();
         bValidar.setOnClickListener(this);
@@ -105,7 +107,9 @@ public class pregunta extends AppCompatActivity implements View.OnClickListener 
                 ).setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        pregunta.super.onBackPressed();
+                        Intent j = new Intent(pregunta.this,MapsActivity.class);
+                        j.putExtra("puntosD",contPuntos);
+                        startActivity(j);
                     }
                 });
 
