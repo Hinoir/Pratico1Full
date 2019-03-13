@@ -13,10 +13,11 @@
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
+
         android:layout_marginBottom="5dp"
         >
 
@@ -24,7 +25,6 @@
             android:id="@+id/fab_preguntaDificil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
             android:src="@drawable/icon_pregunta"
             android:layout_margin="16dp"
             android:visibility="invisible"
@@ -33,21 +33,20 @@
             android:id="@+id/fab_preguntaFacil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
             android:src="@drawable/icon_pregunta"
             android:layout_margin="16dp"
             android:visibility="invisible"
+
             />
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_tienda"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
             android:src="@drawable/icon_tienda"
             android:layout_margin="16dp"
             android:visibility="invisible"
             />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
