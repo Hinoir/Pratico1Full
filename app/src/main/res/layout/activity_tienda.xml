@@ -8,7 +8,7 @@
 
     <ImageView
         android:layout_width="140dp"
-        android:layout_height="200dp"
+        android:layout_height="120dp"
         android:id="@+id/iv_shop"
         android:src="@drawable/eshop"
         android:layout_marginStart="125dp"
@@ -19,24 +19,35 @@
         android:layout_height="50dp"
         android:id="@+id/tv_tpuntos"
         android:layout_below="@id/iv_shop"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
         android:text="Total puntos: 0"
-        android:textSize="40dp"
+        android:textSize="30dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/tv_codigo"
+        android:layout_below="@id/tv_tpuntos"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="20dp"
+        android:text="Codigo:"
+        android:textSize="30dp"
         />
 
     <TextView
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:id="@+id/tv_p1"
-        android:layout_below="@id/tv_tpuntos"
+        android:layout_below="@id/tv_codigo"
         android:background="#7C4DFF"
+        android:textSize="30dp"
         />
     <Button
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:id="@+id/b_c1"
-        android:layout_below="@id/tv_tpuntos"
+        android:layout_below="@id/tv_codigo"
         android:layout_marginStart="255dp"
         android:background="#7B1FA2"
         android:text="Canjear"
@@ -48,6 +59,7 @@
         android:layout_below="@id/tv_p1"
         android:background="#7C4DFF"
         android:layout_marginTop="5dp"
+        android:textSize="30dp"
         />
     <Button
         android:layout_width="150dp"
@@ -66,6 +78,7 @@
         android:layout_below="@id/tv_p2"
         android:background="#7C4DFF"
         android:layout_marginTop="5dp"
+        android:textSize="30dp"
         />
     <Button
         android:layout_width="150dp"
@@ -84,6 +97,7 @@
         android:layout_below="@id/tv_p3"
         android:background="#7C4DFF"
         android:layout_marginTop="5dp"
+        android:textSize="30dp"
         />
     <Button
         android:layout_width="150dp"
@@ -102,6 +116,7 @@
         android:layout_below="@id/tv_p4"
         android:background="#7C4DFF"
         android:layout_marginTop="5dp"
+        android:textSize="30dp"
         />
     <Button
         android:layout_width="150dp"

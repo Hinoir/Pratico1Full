@@ -3,6 +3,7 @@ package com.apps.hinoir.pratico1full;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,9 +20,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.maps.android.PolyUtil;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -32,13 +34,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private LocationManager manager;
     private LatLng usuario;
-    private List<MarkerOptions> markerOptions;
-    private FloatingActionButton preguntaFacil;
-    private FloatingActionButton preguntaDificil;
-    private FloatingActionButton tienda;
+    private FloatingActionButton bPreguntaFacil;
+    private FloatingActionButton bPreguntaDificil;
+    private FloatingActionButton bTienda;
     private Marker markerActual;
-    private int tPuntos;
-    private puntaje pt;
+    //--------------------------------------------
+    //Poligonos
+    //--------------------------------------------
+    private Polygon polygonBiblio;
+    private Polygon polygonM;
+    private Polygon polygonL;
+    //--------------------------------------------
+    //Posiciones
+    //--------------------------------------------
+    public LatLng B1 = new LatLng(3.341682, -76.530092);
+    public LatLng B2 = new LatLng(3.341907, -76.530065);
+    public LatLng B3 = new LatLng(3.341912, -76.529802);
+    public LatLng B4 = new LatLng(3.341666, -76.529802);
+
+    public LatLng M1 = new LatLng(3.342298, -76.530429);
+    public LatLng M2 = new LatLng(3.342368, -76.530419);
+    public LatLng M3 = new LatLng(3.342352, -76.530022);
+    public LatLng M4 = new LatLng(3.342287, -76.530016);
+
+    public LatLng L1 = new LatLng(3.340922, -76.529474);
+    public LatLng L2 = new LatLng(3.341430, -76.529432);
+    public LatLng L3 = new LatLng(3.341436, -76.529287);
+    public LatLng L4 = new LatLng(3.340916, -76.529303);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +72,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        markerOptions = new ArrayList<>();
-        preguntaFacil = findViewById(R.id.fab_preguntaFacil);
-        preguntaDificil = findViewById(R.id.fab_preguntaDificil);
-        tienda = findViewById(R.id.fab_tienda);
-        tPuntos=0;
-        pt = new puntaje();
+        bPreguntaFacil = findViewById(R.id.fab_preguntaFacil);
+        bPreguntaDificil = findViewById(R.id.fab_preguntaDificil);
+        bTienda = findViewById(R.id.fab_tienda);
+
 
     }
 
@@ -70,35 +90,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }, REQUEST_CODE);
 
         // Add a marker in Icesi and move the camera
-        usuario = new LatLng(3.341683, -76.530434);
-        mMap.addMarker(new MarkerOptions().position(usuario).title("Yo"));
+        usuario = new LatLng(3.341800, -76.529941);
+        markerActual=mMap.addMarker(new MarkerOptions().position(usuario).title("Yo"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(usuario));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usuario,20));
-
-        MarkerOptions options = new MarkerOptions().title("Dificil")
-                .position(new LatLng(3.341200,-76.529392));
-        markerOptions.add(options);
-        mMap.addMarker(markerOptions.get(markerOptions.size()-1));
-
-        options = new MarkerOptions().title("Facil")
-                .position(new LatLng(3.342354,-76.530160));
-        markerOptions.add(options);
-        mMap.addMarker(markerOptions.get(markerOptions.size()-1));
-
-        options = new MarkerOptions().title("Tienda")
-                .position(new LatLng(3.341781,-76.529956));
-        markerOptions.add(options);
-        mMap.addMarker(markerOptions.get(markerOptions.size()-1));
-
+        iniciarPolyg();
+        calcularCercano();
 
         //Agregar un listener de ubicacion
-        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, new LocationListener() {
+        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                mMap.clear();
-                for(int i=0;i<markerOptions.size();i++){
-                    mMap.addMarker(markerOptions.get(i));
-                }
+
+                markerActual.remove();
                 usuario=new LatLng(location.getLatitude(),location.getLongitude());
                 markerActual =  mMap.addMarker(new MarkerOptions().position(usuario).title("Yo"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(usuario));
@@ -127,39 +131,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
     }
 
-    @SuppressLint("RestrictedApi")
     public void calcularCercano(){
-        Location act = new Location("actual");
-        act.setLatitude(usuario.latitude);
-        act.setLongitude(usuario.longitude);
-        float referencia = 100000;
-        int indice = 0;
-        for(int i=0;i<markerOptions.size();i++){
-            Location lc = new Location("n"+i);
-            lc.setLatitude(markerOptions.get(i).getPosition().latitude);
-            lc.setLongitude(markerOptions.get(i).getPosition().longitude);
-            float dist = act.distanceTo(lc);
-            if(dist<=referencia){
-                referencia=dist;
-                indice=i;
-            }
-        }
-        float refCer = 100;
-        if(referencia<refCer) {
-            //cercano.setText("El lugar mas cercano es: " + markerOptions.get(indice).getTitle() + " a " + referencia + " metros");
-            if(markerOptions.get(indice).getTitle()=="Facil"){
-                preguntaFacil.show();
-                preguntaFacil.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent j = new Intent(MapsActivity.this,preguntaFacil.class);
-                        startActivity(j);
+
+        if(PolyUtil.containsLocation(usuario,polygonM.getPoints(),true)){
+            bPreguntaFacil.show();
+            bPreguntaFacil.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent j = new Intent(MapsActivity.this,preguntaFacil.class);
+                    startActivity(j);
                     }
                 });
             }
-            else if(markerOptions.get(indice).getTitle()=="Dificil"){
-                preguntaDificil.show();
-                preguntaDificil.setOnClickListener(new View.OnClickListener() {
+            else if(PolyUtil.containsLocation(usuario,polygonL.getPoints(),true)){
+                bPreguntaDificil.show();
+                bPreguntaDificil.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent j = new Intent(MapsActivity.this,pregunta.class);
@@ -168,30 +154,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 });
 
             }
-            else if(markerOptions.get(indice).getTitle()=="Tienda"){
-                tienda.show();
-                tienda.setOnClickListener(new View.OnClickListener() {
+            else if(PolyUtil.containsLocation(usuario,polygonBiblio.getPoints(),true)){
+                bTienda.show();
+                bTienda.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent datos = getIntent();
-                        tPuntos+=datos.getExtras().getInt("puntosF");
-                        datos.getExtras().remove("puntosF");
-                        tPuntos+=datos.getExtras().getInt("puntosD");
-                        datos.getExtras().remove("puntosD");
-                        tPuntos+=datos.getExtras().getInt("puntosT");
                         Intent j = new Intent(MapsActivity.this,tienda.class);
-                        j.putExtra("totalPuntos",tPuntos);
                         startActivity(j);
                     }
                 });
-
             }
             else{
-                preguntaFacil.hide();
-                preguntaDificil.hide();
-                tienda.hide();
-            }
+                bPreguntaFacil.hide();
+                bPreguntaDificil.hide();
+                bTienda.hide();
         }
+
+    }
+
+    public void iniciarPolyg(){
+        polygonBiblio=mMap.addPolygon(new PolygonOptions().add(B1,B2,B3,B4));
+        polygonBiblio.setStrokeColor(Color.BLUE);
+
+        polygonL=mMap.addPolygon(new PolygonOptions().add(L1,L2,L3,L4));
+        polygonL.setStrokeColor(Color.GREEN);
+
+        polygonM=mMap.addPolygon(new PolygonOptions().add(M1,M2,M3,M4));
+        polygonM.setStrokeColor(Color.RED);
 
     }
 
